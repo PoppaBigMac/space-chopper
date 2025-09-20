@@ -1,0 +1,154 @@
+:root {
+    --bg-gradient: linear-gradient(180deg, hsl(230, 70%, 12%) 0%, hsl(220, 80%, 18%) 100%);
+    --star-color: #fff;
+    --ui-bg: rgba(12, 18, 44, 0.85);
+    --ui-border: 2px solid #4fc3f7;
+    --ui-accent: #4fc3f7;
+    --ui-shadow: 0 0 16px #4fc3f788, 0 0 4px #fff2;
+    --ui-font: 'Press Start 2P', 'VT323', 'Monaco', monospace;
+    --button-bg: linear-gradient(180deg, #3a78cc 0%, #2262a6 100%);
+    --button-hover: linear-gradient(180deg, #53a2f7 0%, #17406a 100%);
+    --button-border: 2px solid #fff8;
+    --button-shadow: 0 0 8px #4fc3f7cc;
+    --score-color: #ffe066;
+    --life-color: #fd4;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-gradient);
+    font-family: var(--ui-font);
+    user-select: none;
+    overflow: hidden;
+}
+#game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative; /* Added for overlay absolute positioning */
+}
+
+#game-canvas {
+    display: block;
+    background: transparent;
+    border-radius: 16px;
+    box-shadow: 0 6px 36px #001e3a99, 0 0 0 4px #0ff4;
+    border: 3px solid #70e8ff;
+    transition: box-shadow 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+/* 
+   Remove #ui-overlay absolute sizing so it doesn't break containment.
+   If you want to keep #ui-overlay for pointer-events: none, you can, but
+   the UI panels are now always attached to #game-container and positioned absolutely within it.
+*/
+#ui-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.ui-panel {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px 64px 32px 64px;
+    background: var(--ui-bg);
+    border: var(--ui-border);
+    border-radius: 18px;
+    box-shadow: var(--ui-shadow);
+    color: #fff;
+    font-family: var(--ui-font);
+    text-align: center;
+    z-index: 50;
+    min-width: 420px;
+    pointer-events: auto;
+    animation: popin 0.5s cubic-bezier(.44,-0.28,.4,1.26);
+    /* Ensure panel can't overflow outside the game container */
+    max-width: 96vw;
+    max-height: 90vh;
+    overflow: auto;
+}
+@keyframes popin {
+    0% { transform: translate(-50%, -60%) scale(0.8); opacity:0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity:1; }
+}
+
+.ui-panel h1 {
+    font-size: 2.6rem;
+    margin: 0 0 16px 0;
+    letter-spacing: 2px;
+    color: #70e8ff;
+    text-shadow: 0 4px 8px #0ff8;
+}
+.ui-panel .score {
+    font-size: 1.6rem;
+    color: var(--score-color);
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #000c;
+}
+.ui-panel button {
+    background: var(--button-bg);
+    color: #fff;
+    padding: 12px 36px;
+    font-size: 1.4rem;
+    border: var(--button-border);
+    border-radius: 8px;
+    outline: none;
+    font-family: var(--ui-font);
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: var(--button-shadow);
+    transition: background 0.2s, box-shadow 0.2s;
+    pointer-events: auto;
+}
+.ui-panel button:hover, .ui-panel button:focus {
+    background: var(--button-hover);
+    box-shadow: 0 0 16px #fff7, 0 0 24px #4fc3f7cc;
+}
+
+/* Remove .hud overlay since HUD is now drawn in-canvas */
+/*
+.hud {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    font-size: 1.2rem;
+    color: #fff;
+    text-shadow: 0 2px 8px #000c;
+    font-family: var(--ui-font);
+    display: flex;
+    justify-content: space-between;
+    z-index: 25;
+    pointer-events: none;
+}
+
+.hud .score {
+    margin-left: 24px;
+    color: var(--score-color);
+}
+.hud .lives {
+    margin-right: 24px;
+    color: var(--life-color);
+    letter-spacing: 2px;
+}
+*/
+
+@media (max-width: 1200px) {
+    #game-container { transform: scale(0.85); }
+}
+@media (max-width: 1000px) {
+    #game-container { transform: scale(0.7); }
+}
+@media (max-width: 700px) {
+    #game-container { transform: scale(0.47); }
+}
